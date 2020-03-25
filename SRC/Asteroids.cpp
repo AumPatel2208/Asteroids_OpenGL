@@ -12,6 +12,7 @@
 #include "GUILabel.h"
 #include "Explosion.h"
 #include "BulletPowerUp.h"
+#include "OnePowerUp.h"
 
 // PUBLIC INSTANCE CONSTRUCTORS ///////////////////////////////////////////////
 
@@ -67,7 +68,7 @@ void Asteroids::Start() {
 	//
 	// Animation* powerUp_anim = AnimationManager::GetInstance().CreateAnimationFromFile(
 	// 	"powerUp", 128, 128, 128, 128, "spaceship_fs.png");
-	
+
 	/*Code to start the game, moved to keypress 1*/
 	/*
 		// Create a spaceship and add it to the world
@@ -112,12 +113,14 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y) {
 			// Create some asteroids and add them to the world
 			CreateAsteroids(10);
 			CreatePowerUps(1);
+			CreateOnePowerUps(1);
+
 			//Hiding menu
 			aGameTitle->SetVisible(false);
 			aStartGameOption->SetVisible(false);
 			aExitGameOption->SetVisible(false);
-			
-			
+
+
 			//Create the GUI
 			CreateGUI();
 
@@ -184,9 +187,20 @@ void Asteroids::OnObjectRemoved(GameWorld* world, shared_ptr<GameObject> object)
 		if (mAsteroidCount <= 0) {
 			SetTimer(500, START_NEXT_LEVEL);
 		}
-	} else if(object->GetType()==GameObjectType("BulletPowerUp")) {
+	}
+	else if (object->GetType() == GameObjectType("BulletPowerUp")) {
 		mSpaceship->toggleSuperShot();
+		bulletPowerTime = 10;
 		SetTimer(10000, RESET_POWER_UP);
+		SetTimer(10, INCREASE_POWER_UP_COUNTER);
+	}
+	else if (object->GetType() == GameObjectType("OnePowerUp")) {
+		mPlayer.addLives(1);
+		std::ostringstream msg_stream;
+		msg_stream << "Lives: " << mPlayer.getLives();
+		// Get the lives left message as a string
+		std::string lives_msg = msg_stream.str();
+		mLivesLabel->SetText(lives_msg);
 	}
 }
 
@@ -208,12 +222,19 @@ void Asteroids::OnTimer(int value) {
 		mGameOverLabel->SetVisible(true);
 	}
 
-	if(value==RESET_POWER_UP) {
+	if (value == RESET_POWER_UP) {
 		mSpaceship->toggleSuperShot();
 	}
 
-	if(value == INCREASE_POWER_UP_COUNTER) {
-		
+	if (value == INCREASE_POWER_UP_COUNTER) {
+		bulletPowerTime -= 1;
+		std::ostringstream msg_stream;
+		msg_stream << "Bullet Time: " << bulletPowerTime + 1;
+		std::string bullet_msg = msg_stream.str();
+		aBulletPowerTime->SetText(bullet_msg);
+		if (bulletPowerTime >= 0) {
+			SetTimer(1000, INCREASE_POWER_UP_COUNTER);
+		}
 	}
 
 }
@@ -265,13 +286,27 @@ void Asteroids::CreateAsteroids(const uint num_asteroids) {
 // 	mGameWorld->AddObject(asteroid);
 // }
 
-void Asteroids::CreatePowerUps(const uint num_powerUps)
-{
+void Asteroids::CreatePowerUps(const uint num_powerUps) {
 	for (uint i = 0; i < num_powerUps; i++) {
 		shared_ptr<GameObject> powerUp = make_shared<BulletPowerUp>();
 		// Animation *anim_ptr = AnimationManager::GetInstance().GetAnimationByName("powerUp");
-		Animation *anim_ptr = AnimationManager::GetInstance().CreateAnimationFromFile(
-			"powerUp", 160, 160, 160, 160, "1-up-powerup (1).png");
+		Animation* anim_ptr = AnimationManager::GetInstance().CreateAnimationFromFile(
+			"bulletPowerUp", 160, 160, 160, 160, "bulletPowerUp.png");
+		shared_ptr<Sprite> spaceship_sprite =
+			make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
+		powerUp->SetSprite(spaceship_sprite);
+		powerUp->SetBoundingShape(make_shared<BoundingSphere>(powerUp->GetThisPtr(), 4.00f));
+		powerUp->SetScale(0.05f);
+		mGameWorld->AddObject(powerUp);
+	}
+}
+
+void Asteroids::CreateOnePowerUps(const uint num_powerUps) {
+	for (uint i = 0; i < num_powerUps; i++) {
+		shared_ptr<GameObject>powerUp = make_shared<OnePowerUp>();
+		// Animation *anim_ptr = AnimationManager::GetInstance().GetAnimationByName("powerUp");
+		Animation* anim_ptr = AnimationManager::GetInstance().CreateAnimationFromFile(
+			"onePowerUp", 160, 160, 160, 160, "1-up-powerup (1).png");
 		shared_ptr<Sprite> spaceship_sprite =
 			make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
 		powerUp->SetSprite(spaceship_sprite);
@@ -310,10 +345,16 @@ void Asteroids::CreateGUI() {
 
 	aExitGameOption = make_shared<GUILabel>("2) Exit Game");
 	aExitGameOption->SetVerticalAlignment(GUIComponent::GUI_VALIGN_TOP);
+
 	shared_ptr<GUIComponent> a_game_menu_exitGame_component = static_pointer_cast<GUIComponent>(aExitGameOption);
 	mGameDisplay->GetContainer()->AddComponent(a_game_menu_exitGame_component, GLVector2f(0.7f, 1.0f));
 
-	
+	aBulletPowerTime = make_shared<GUILabel>("Bullet Time: 0");
+	aBulletPowerTime->SetVerticalAlignment(GUIComponent::GUI_VALIGN_BOTTOM);
+
+	shared_ptr<GUIComponent> a_bulletPowerTime_component = static_pointer_cast<GUIComponent>(aExitGameOption);
+	mGameDisplay->GetContainer()->AddComponent(aBulletPowerTime, GLVector2f(0.65f, 0.0f));
+
 	// Create a new GUILabel and wrap it up in a shared_ptr
 	mScoreLabel = make_shared<GUILabel>("Score: 0");
 	// Set the vertical alignment of the label to GUI_VALIGN_TOP

@@ -54,6 +54,7 @@ private:
 	shared_ptr<GUILabel> mLivesLabel;
 	shared_ptr<GUILabel> mGameOverLabel;
 
+	shared_ptr<GUILabel> aBulletPowerTime;
 	shared_ptr<GUILabel> aGameTitle;
 	shared_ptr<GUILabel> aStartGameOption;
 	shared_ptr<GUILabel> aExitGameOption;
@@ -69,6 +70,7 @@ private:
 	void CreateMenu();
 	void CreateAsteroids(const uint num_asteroids);
 	void CreatePowerUps(const uint num_powerUps);
+	void CreateOnePowerUps(const uint num_powerUps);
 
 	shared_ptr<GameObject> CreateExplosion();
 	
@@ -78,6 +80,7 @@ private:
 	const static uint RESET_POWER_UP = 3;
 	const static uint INCREASE_POWER_UP_COUNTER = 4;
 
+	int bulletPowerTime;
 	ScoreKeeper mScoreKeeper;
 	Player mPlayer;
 };

@@ -111,7 +111,7 @@ void Spaceship::Shoot(void) {
 
 
 bool Spaceship::CollisionTest(shared_ptr<GameObject> o) {
-	if (o->GetType() != GameObjectType("Asteroid") && o->GetType() != GameObjectType("BulletPowerUp")) return false;
+	if (o->GetType() != GameObjectType("Asteroid")) return false; //&& o->GetType() != GameObjectType("BulletPowerUp")) return false;
 	if (mBoundingShape.get() == NULL) return false;
 	if (o->GetBoundingShape().get() == NULL) return false;
 	if (o->GetType() == GameObjectType("Asteroid")) {
@@ -124,15 +124,15 @@ bool Spaceship::CollisionTest(shared_ptr<GameObject> o) {
 }
 
 void Spaceship::OnCollision(const GameObjectList& objects) {
-	if (isAsteroid) {
+	// if (isAsteroid) {
 		//Remove Spaceship
-		// mWorld->FlagForRemoval(GetThisPtr());
+		mWorld->FlagForRemoval(GetThisPtr());
 		// Reset isAsteroid
-		isAsteroid = false;
-	}
-	else if (isPowerUp) {
-		//Implement Power Up condition
-		superShoot = true;
-		isPowerUp = false;
-	}
+		// isAsteroid = false;
+	// }
+	// else if (isPowerUp) {
+	// 	//Implement Power Up condition
+	// 	superShoot = true;
+	// 	isPowerUp = false;
+	// }
 }

@@ -109,6 +109,7 @@
     <ClCompile Include="..\..\SRC\BulletPowerUp.cpp" />
     <ClCompile Include="..\..\SRC\Explosion.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\SRC\OnePowerUp.cpp" />
     <ClCompile Include="..\..\src\Spaceship.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -118,8 +119,11 @@
     <ClInclude Include="..\..\SRC\BulletPowerUp.h" />
     <ClInclude Include="..\..\SRC\Explosion.h" />
     <ClInclude Include="..\..\SRC\IPlayerListener.h" />
+    <ClInclude Include="..\..\SRC\IPowerListener.h" />
     <ClInclude Include="..\..\SRC\IScoreListener.h" />
+    <ClInclude Include="..\..\SRC\OnePowerUp.h" />
     <ClInclude Include="..\..\SRC\Player.h" />
+    <ClInclude Include="..\..\SRC\PowerKeeper.h" />
     <ClInclude Include="..\..\SRC\ScoreKeeper.h" />
     <ClInclude Include="..\..\src\Spaceship.h" />
   </ItemGroup>
