@@ -28,3 +28,8 @@
 - implementing Power up label
 	- PowerKeeper.h
 	- IPowerListener.h
+
+- Add a bullet power up that is 360 bullets...
+- Started Creating it
+	- added toggle functionality, just need to create the H and CPP
+- created H and CPP, Windows glitched on opening downloads folder, image should be donwloaded

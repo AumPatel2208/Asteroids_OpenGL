@@ -69,7 +69,7 @@ private:
 	void CreateGUI();
 	void CreateMenu();
 	void CreateAsteroids(const uint num_asteroids);
-	void CreatePowerUps(const uint num_powerUps);
+	void CreateBulletPowerUps(const uint num_powerUps);
 	void CreateOnePowerUps(const uint num_powerUps);
 
 	shared_ptr<GameObject> CreateExplosion();
@@ -77,9 +77,13 @@ private:
 	const static uint SHOW_GAME_OVER = 0;
 	const static uint START_NEXT_LEVEL = 1;
 	const static uint CREATE_NEW_PLAYER = 2;
-	const static uint RESET_POWER_UP = 3;
+	const static uint RESET_BULLET_POWER_UP = 3;
 	const static uint INCREASE_POWER_UP_COUNTER = 4;
+	const static uint RESET_CIRCLE_BULLET_POWER_UP = 5;
 
+	const static int THREE_SHOT = 0;
+	const static int CIRCLE_SHOT = 1;
+	
 	int bulletPowerTime;
 	ScoreKeeper mScoreKeeper;
 	Player mPlayer;

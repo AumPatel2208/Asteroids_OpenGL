@@ -112,7 +112,7 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y) {
 			mGameWorld->AddObject(CreateSpaceship());
 			// Create some asteroids and add them to the world
 			CreateAsteroids(10);
-			CreatePowerUps(1);
+			CreateBulletPowerUps(1);
 			CreateOnePowerUps(1);
 
 			//Hiding menu
@@ -190,8 +190,9 @@ void Asteroids::OnObjectRemoved(GameWorld* world, shared_ptr<GameObject> object)
 	}
 	else if (object->GetType() == GameObjectType("BulletPowerUp")) {
 		mSpaceship->toggleSuperShot();
+		// mSpaceship->toggleUltraShoot();
 		bulletPowerTime = 10;
-		SetTimer(10000, RESET_POWER_UP);
+		SetTimer(10000, RESET_BULLET_POWER_UP);
 		SetTimer(10, INCREASE_POWER_UP_COUNTER);
 	}
 	else if (object->GetType() == GameObjectType("OnePowerUp")) {
@@ -201,6 +202,12 @@ void Asteroids::OnObjectRemoved(GameWorld* world, shared_ptr<GameObject> object)
 		// Get the lives left message as a string
 		std::string lives_msg = msg_stream.str();
 		mLivesLabel->SetText(lives_msg);
+	}else if(object->GetType()==GameObjectType("CircleBulletPowerUp")) {
+		// mSpaceship->toggleSuperShot();
+		mSpaceship->toggleUltraShoot();
+		bulletPowerTime = 10;
+		SetTimer(10000, RESET_CIRCLE_BULLET_POWER_UP);
+		SetTimer(10, INCREASE_POWER_UP_COUNTER);
 	}
 }
 
@@ -215,6 +222,8 @@ void Asteroids::OnTimer(int value) {
 	if (value == START_NEXT_LEVEL) {
 		mLevel++;
 		int num_asteroids = 10 + 2 * mLevel;
+		CreateOnePowerUps(1);
+		CreateBulletPowerUps(1);
 		CreateAsteroids(num_asteroids);
 	}
 
@@ -222,7 +231,7 @@ void Asteroids::OnTimer(int value) {
 		mGameOverLabel->SetVisible(true);
 	}
 
-	if (value == RESET_POWER_UP) {
+	if (value == RESET_BULLET_POWER_UP) {
 		mSpaceship->toggleSuperShot();
 	}
 
@@ -235,6 +244,10 @@ void Asteroids::OnTimer(int value) {
 		if (bulletPowerTime >= 0) {
 			SetTimer(1000, INCREASE_POWER_UP_COUNTER);
 		}
+	}
+
+	if (value == RESET_CIRCLE_BULLET_POWER_UP) {
+		mSpaceship->toggleUltraShoot();
 	}
 
 }
@@ -274,7 +287,7 @@ void Asteroids::CreateAsteroids(const uint num_asteroids) {
 	}
 }
 
-// void Asteroids::CreatePowerUps(const uint num_powerUps) {
+// void Asteroids::CreateBulletPowerUps(const uint num_powerUps) {
 // 	Animation* anim_ptr = AnimationManager::GetInstance().GetAnimationByName("spaceship");
 // 	shared_ptr<Sprite> asteroid_sprite
 // 		= make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
@@ -286,9 +299,10 @@ void Asteroids::CreateAsteroids(const uint num_asteroids) {
 // 	mGameWorld->AddObject(asteroid);
 // }
 
-void Asteroids::CreatePowerUps(const uint num_powerUps) {
+void Asteroids::CreateBulletPowerUps(const uint num_powerUps) {
 	for (uint i = 0; i < num_powerUps; i++) {
 		shared_ptr<GameObject> powerUp = make_shared<BulletPowerUp>();
+		
 		// Animation *anim_ptr = AnimationManager::GetInstance().GetAnimationByName("powerUp");
 		Animation* anim_ptr = AnimationManager::GetInstance().CreateAnimationFromFile(
 			"bulletPowerUp", 160, 160, 160, 160, "bulletPowerUp.png");

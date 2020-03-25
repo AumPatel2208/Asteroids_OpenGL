@@ -69,26 +69,29 @@ void Spaceship::Shoot(void) {
 		//maybe add the top one with a for loop that changes angle avoiding duplicate code.
 		count = 3;
 	}
+	if(ultraShoot){
+		count = 36;
+	}
 
 	GLfloat tempAngle = mAngle;
 
 
 	for (int i = 0; i < count; ++i) {
 		// Construct a unit length vector in the direction the spaceship is headed
-		switch (i) {
-		case 0:
+		// switch (i) {
+		// case 0:
 
-			tempAngle = mAngle;
-			break;
-		case 1:
-			tempAngle = mAngle + 10;
-			break;
-		case 2:
-			tempAngle = mAngle + 20;
-			break;
-		}
+		// 	tempAngle = mAngle;
+		// 	break;
+		// case 1:
+		// 	tempAngle = mAngle + 10;
+		// 	break;
+		// case 2:
+		// 	tempAngle = mAngle + 20;
+		// 	break;
+		// }
 
-		GLVector3f spaceship_heading(cos(DEG2RAD * tempAngle), sin(DEG2RAD * tempAngle), 0);
+		GLVector3f spaceship_heading(cos(DEG2RAD * (mAngle+(10*i))), sin(DEG2RAD * (mAngle+(10*i))), 0);
 		spaceship_heading.normalize();
 		// Calculate the point at the node of the spaceship from position and heading
 		GLVector3f bullet_position = mPosition + (spaceship_heading * 4);
@@ -107,6 +110,7 @@ void Spaceship::Shoot(void) {
 
 
 }
+	
 
 
 

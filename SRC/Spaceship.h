@@ -29,11 +29,15 @@ public:
 	void toggleSuperShot() {
 		superShoot = !superShoot;
 	}
+	void toggleUltraShoot() {
+		ultraShoot = !ultraShoot;
+	}
 private:
 	float mThrust;
 	bool isAsteroid = false;
 	bool isPowerUp = false;
 	bool superShoot = false;
+	bool ultraShoot = false;
 	shared_ptr<Shape> mSpaceshipShape;
 	shared_ptr<Shape> mThrusterShape;
 	shared_ptr<Shape> mBulletShape;
