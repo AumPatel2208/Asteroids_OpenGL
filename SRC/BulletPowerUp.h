@@ -19,7 +19,7 @@ public:
 	void OnCollision(const GameObjectList& objects);
 
 private:
-	bool isSpaceship;
+	bool isSpaceship = false;
 };
 
 

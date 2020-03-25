@@ -18,7 +18,7 @@ bool BulletPowerUp::CollisionTest(shared_ptr<GameObject> o)
 	if (GetType() == o->GetType()) return false;
 	if (mBoundingShape.get() == NULL) return false;
 	if (o->GetBoundingShape().get() == NULL) return false;
-	if (o->GetType() == GameObjectType("Spaceship")) isSpaceship = true;
+	// if (o->GetType() == GameObjectType("Spaceship")) isSpaceship = true;
 	return mBoundingShape->CollisionTest(o->GetBoundingShape());
 }
 
@@ -28,8 +28,8 @@ void BulletPowerUp::Update(int t) {
 
 void BulletPowerUp::OnCollision(const GameObjectList& objects)
 {
-	if (isSpaceship) {
-		mWorld->FlagForRemoval(GetThisPtr());
-		isSpaceship = false;
-	}
+	// if (isSpaceship) {
+	// 	mWorld->FlagForRemoval(GetThisPtr());
+	// 	isSpaceship = false;
+	// }
 }
