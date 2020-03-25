@@ -12,6 +12,7 @@
 #include "GUILabel.h"
 #include "Explosion.h"
 #include "BulletPowerUp.h"
+#include "CircleBulletPowerUp.h"
 #include "OnePowerUp.h"
 
 // PUBLIC INSTANCE CONSTRUCTORS ///////////////////////////////////////////////
@@ -114,7 +115,7 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y) {
 			CreateAsteroids(10);
 			CreateBulletPowerUps(1);
 			CreateOnePowerUps(1);
-
+			CreateCircleBulletPowerUps(1);
 			//Hiding menu
 			aGameTitle->SetVisible(false);
 			aStartGameOption->SetVisible(false);
@@ -330,6 +331,21 @@ void Asteroids::CreateOnePowerUps(const uint num_powerUps) {
 	}
 }
 
+void Asteroids::CreateCircleBulletPowerUps(const uint num_powerUps) {
+	for (uint i = 0; i < num_powerUps; i++) {
+		shared_ptr<GameObject> powerUp = make_shared<CircleBulletPowerUp>();
+		
+		// Animation *anim_ptr = AnimationManager::GetInstance().GetAnimationByName("powerUp");
+		Animation* anim_ptr = AnimationManager::GetInstance().CreateAnimationFromFile(
+			"circleBulletPowerUp", 160, 160, 160, 160, "circleShot.png");
+		shared_ptr<Sprite> spaceship_sprite =
+			make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
+		powerUp->SetSprite(spaceship_sprite);
+		powerUp->SetBoundingShape(make_shared<BoundingSphere>(powerUp->GetThisPtr(), 4.00f));
+		powerUp->SetScale(0.05f);
+		mGameWorld->AddObject(powerUp);
+	}
+}
 
 void Asteroids::CreateMenu() {
 	// Add a (transparent) border around the edge of the game display
