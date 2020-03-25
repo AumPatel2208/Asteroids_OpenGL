@@ -105,7 +105,7 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y) {
 			// Create a spaceship and add it to the world
 			mGameWorld->AddObject(CreateSpaceship());
 			// Create some asteroids and add them to the world
-			CreateAsteroids(10);
+			// CreateAsteroids(10);
 			CreatePowerUps(1);
 			//Hiding menu
 			aGameTitle->SetVisible(false);
@@ -237,18 +237,26 @@ void Asteroids::CreateAsteroids(const uint num_asteroids) {
 	}
 }
 
-void Asteroids::CreatePowerUps(const uint num_powerUps) {
-	Animation* anim_ptr = AnimationManager::GetInstance().GetAnimationByName("spaceship");
-	shared_ptr<Sprite> asteroid_sprite
-		= make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
-	asteroid_sprite->SetLoopAnimation(true);
-	shared_ptr<GameObject> asteroid = make_shared<BulletPowerUp>();
-	asteroid->SetBoundingShape(make_shared<BoundingSphere>(asteroid->GetThisPtr(), 5.0f));
-	asteroid->SetSprite(asteroid_sprite);
-	asteroid->SetScale(0.2f);
-	mGameWorld->AddObject(asteroid);
-}
+// void Asteroids::CreatePowerUps(const uint num_powerUps) {
+// 	Animation* anim_ptr = AnimationManager::GetInstance().GetAnimationByName("spaceship");
+// 	shared_ptr<Sprite> asteroid_sprite
+// 		= make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
+// 	asteroid_sprite->SetLoopAnimation(true);
+// 	shared_ptr<GameObject> asteroid = make_shared<BulletPowerUp>();
+// 	asteroid->SetBoundingShape(make_shared<BoundingSphere>(asteroid->GetThisPtr(), 5.0f));
+// 	asteroid->SetSprite(asteroid_sprite);
+// 	asteroid->SetScale(0.2f);
+// 	mGameWorld->AddObject(asteroid);
+// }
 
+void Asteroids::CreatePowerUps(const uint num_powerUps)
+{
+	for (uint i = 0; i < num_powerUps; i++) {
+		shared_ptr<GameObject> powerUp = make_shared<BulletPowerUp>();
+		powerUp->SetBoundingShape(make_shared<BoundingSphere>(powerUp->GetThisPtr(), 10.0f));
+		mGameWorld->AddObject(powerUp);
+	}
+}
 
 
 void Asteroids::CreateMenu() {

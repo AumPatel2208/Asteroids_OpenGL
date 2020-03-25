@@ -11,8 +11,8 @@ public:
 	// BulletPowerUp(const BulletPowerUp& b);
 	virtual ~BulletPowerUp(void);
 
-	virtual void Update(int t);
-	// virtual void Render();
+	// virtual void Update(int t);
+	virtual void Render();
 
 
 	bool CollisionTest(shared_ptr<GameObject> o);
