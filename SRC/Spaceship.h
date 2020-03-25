@@ -26,12 +26,14 @@ public:
 
 	bool CollisionTest(shared_ptr<GameObject> o);
 	void OnCollision(const GameObjectList &objects);
-
+	void toggleSuperShot() {
+		superShoot = !superShoot;
+	}
 private:
 	float mThrust;
 	bool isAsteroid = false;
 	bool isPowerUp = false;
-	bool superShoot = true;
+	bool superShoot = false;
 	shared_ptr<Shape> mSpaceshipShape;
 	shared_ptr<Shape> mThrusterShape;
 	shared_ptr<Shape> mBulletShape;
