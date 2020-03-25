@@ -11,6 +11,7 @@
 #include "BoundingSphere.h"
 #include "GUILabel.h"
 #include "Explosion.h"
+#include "BulletPowerUp.h"
 
 // PUBLIC INSTANCE CONSTRUCTORS ///////////////////////////////////////////////
 
@@ -105,7 +106,7 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y) {
 			mGameWorld->AddObject(CreateSpaceship());
 			// Create some asteroids and add them to the world
 			CreateAsteroids(10);
-
+			CreatePowerUps(1);
 			//Hiding menu
 			aGameTitle->SetVisible(false);
 			aStartGameOption->SetVisible(false);
@@ -235,6 +236,20 @@ void Asteroids::CreateAsteroids(const uint num_asteroids) {
 		mGameWorld->AddObject(asteroid);
 	}
 }
+
+void Asteroids::CreatePowerUps(const uint num_powerUps) {
+	Animation* anim_ptr = AnimationManager::GetInstance().GetAnimationByName("spaceship");
+	shared_ptr<Sprite> asteroid_sprite
+		= make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
+	asteroid_sprite->SetLoopAnimation(true);
+	shared_ptr<GameObject> asteroid = make_shared<BulletPowerUp>();
+	asteroid->SetBoundingShape(make_shared<BoundingSphere>(asteroid->GetThisPtr(), 5.0f));
+	asteroid->SetSprite(asteroid_sprite);
+	asteroid->SetScale(0.2f);
+	mGameWorld->AddObject(asteroid);
+}
+
+
 
 void Asteroids::CreateMenu() {
 	// Add a (transparent) border around the edge of the game display

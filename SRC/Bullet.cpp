@@ -6,33 +6,28 @@
 
 /** Constructor. Bullets live for 2s by default. */
 Bullet::Bullet()
-	: GameObject("Bullet"), mTimeToLive(2000)
-{
+	: GameObject("Bullet"), mTimeToLive(2000) {
 }
 
 /** Construct a new bullet with given position, velocity, acceleration, angle, rotation and lifespan. */
 Bullet::Bullet(GLVector3f p, GLVector3f v, GLVector3f a, GLfloat h, GLfloat r, int ttl)
-	: GameObject("Bullet", p, v, a, h, r), mTimeToLive(ttl)
-{
+	: GameObject("Bullet", p, v, a, h, r), mTimeToLive(ttl) {
 }
 
 /** Copy constructor. */
 Bullet::Bullet(const Bullet& b)
 	: GameObject(b),
-	  mTimeToLive(b.mTimeToLive)
-{
+	  mTimeToLive(b.mTimeToLive) {
 }
 
 /** Destructor. */
-Bullet::~Bullet(void)
-{
+Bullet::~Bullet(void) {
 }
 
 // PUBLIC INSTANCE METHODS ////////////////////////////////////////////////////
 
 /** Update bullet, removing it from game world if necessary. */
-void Bullet::Update(int t)
-{
+void Bullet::Update(int t) {
 	// Update position/velocity
 	GameObject::Update(t);
 	// Reduce time to live
@@ -46,15 +41,13 @@ void Bullet::Update(int t)
 
 }
 
-bool Bullet::CollisionTest(shared_ptr<GameObject> o)
-{
+bool Bullet::CollisionTest(shared_ptr<GameObject> o) {
 	if (o->GetType() != GameObjectType("Asteroid")) return false;
 	if (mBoundingShape.get() == NULL) return false;
 	if (o->GetBoundingShape().get() == NULL) return false;
 	return mBoundingShape->CollisionTest(o->GetBoundingShape());
 }
 
-void Bullet::OnCollision(const GameObjectList& objects)
-{
+void Bullet::OnCollision(const GameObjectList& objects) {
 	mWorld->FlagForRemoval(GetThisPtr());
 }

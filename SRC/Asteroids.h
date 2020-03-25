@@ -68,6 +68,7 @@ private:
 	void CreateGUI();
 	void CreateMenu();
 	void CreateAsteroids(const uint num_asteroids);
+	void CreatePowerUps(const uint num_powerUps);
 
 	shared_ptr<GameObject> CreateExplosion();
 	

@@ -12,7 +12,7 @@ public:
 	Spaceship(GLVector3f p, GLVector3f v, GLVector3f a, GLfloat h, GLfloat r);
 	Spaceship(const Spaceship& s);
 	virtual ~Spaceship(void);
-
+	
 	virtual void Update(int t);
 	virtual void Render(void);
 
@@ -29,7 +29,9 @@ public:
 
 private:
 	float mThrust;
-
+	bool isAsteroid = false;
+	bool isPowerUp = false;
+	bool superShoot = true;
 	shared_ptr<Shape> mSpaceshipShape;
 	shared_ptr<Shape> mThrusterShape;
 	shared_ptr<Shape> mBulletShape;

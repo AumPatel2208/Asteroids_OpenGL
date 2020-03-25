@@ -8,3 +8,5 @@
 ## Part 2
 - Bonus/Power up System
 - started implementation
+- Rushed Bullet Adding
+	- Improve tommorow
