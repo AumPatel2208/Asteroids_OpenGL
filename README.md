@@ -43,6 +43,17 @@
 	- Create Alien Class and H, with thrust, and shoot
 	- call thrust in OnTimerMethod
 
+- Alien thrusts towards player, and shoots
+
+### Improvements
+- shooting slower, slow enemy down
+- change alien sprite
+
+
+## things to write about
+- starts of slow with 1 asteroid and one enemy, a chance for the player to get a good understanding of the AI behaviour
+- Alien can collide with asteroids and destroy them, the player can use this to their advantage
+- Power-ups do not vanish, so they can strategically time their power pickups
 - 
 
 # Validation
