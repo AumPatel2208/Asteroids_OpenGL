@@ -7,6 +7,7 @@
 #include "GameWorld.h"
 #include "GameDisplay.h"
 #include "Spaceship.h"
+#include "AlienSpaceship.h"
 #include "BoundingShape.h"
 #include "BoundingSphere.h"
 #include "GUILabel.h"
@@ -60,15 +61,14 @@ void Asteroids::Start() {
 
 	Animation* explosion_anim = AnimationManager::GetInstance().CreateAnimationFromFile(
 		"explosion", 64, 1024, 64, 64, "explosion_fs.png");
+	Animation* blue_explosion_anim = AnimationManager::GetInstance().CreateAnimationFromFile(
+		"blueExplosion", 64, 1024, 64, 64, "explosionBlue_fs.png");
 	Animation* asteroid1_anim = AnimationManager::GetInstance().CreateAnimationFromFile(
 		"asteroid1", 128, 8192, 128, 128, "asteroid1_fs.png");
 	Animation* spaceship_anim = AnimationManager::GetInstance().CreateAnimationFromFile(
 		"spaceship", 128, 128, 128, 128, "spaceship_fs.png");
-	// Animation* powerUp_anim = AnimationManager::GetInstance().CreateAnimationFromFile(
-	// 	"powerUp1", 128, 128, 128, 128, "powerUp1_fs.png");
-	//
-	// Animation* powerUp_anim = AnimationManager::GetInstance().CreateAnimationFromFile(
-	// 	"powerUp", 128, 128, 128, 128, "spaceship_fs.png");
+	Animation* alien_spaceship_anim = AnimationManager::GetInstance().CreateAnimationFromFile(
+		"alienSpaceship", 128, 128, 128, 128, "spaceship_fs - Copy.png");
 
 	/*Code to start the game, moved to keypress 1*/
 	/*
@@ -105,14 +105,18 @@ void Asteroids::Stop() {
 void Asteroids::OnKeyPressed(uchar key, int x, int y) {
 	switch (key) {
 	case ' ':
-		mSpaceship->Shoot();
+		if (isGameRunning) mSpaceship->Shoot();
 		break;
 	case '1':
 		if (!isGameRunning) {
 			// Create a spaceship and add it to the world
 			mGameWorld->AddObject(CreateSpaceship());
+			// Create an alienspaceship and add it to the world
+			mGameWorld->AddObject(CreateAlienSpaceship());
+			SetTimer(500, UPDATE_ALIEN_SHIP);
+			SetTimer(2000, SHOOT_ALIEN_SHIP);
 			// Create some asteroids and add them to the world
-			CreateAsteroids(10);
+			CreateAsteroids(1);
 			CreateBulletPowerUps(1);
 			CreateOnePowerUps(1);
 			CreateCircleBulletPowerUps(1);
@@ -134,7 +138,8 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y) {
 		}
 		break;
 	case '2':
-		std::exit(0);
+		// std::exit(0);
+		Stop();
 	default:
 		break;
 	}
@@ -146,13 +151,13 @@ void Asteroids::OnKeyReleased(uchar key, int x, int y) {
 void Asteroids::OnSpecialKeyPressed(int key, int x, int y) {
 	switch (key) {
 		// If up arrow key is pressed start applying forward thrust
-	case GLUT_KEY_UP: mSpaceship->Thrust(10);
+	case GLUT_KEY_UP: if (isGameRunning)mSpaceship->Thrust(10);
 		break;
 		// If left arrow key is pressed start rotating anti-clockwise
-	case GLUT_KEY_LEFT: mSpaceship->Rotate(90);
+	case GLUT_KEY_LEFT: if (isGameRunning) mSpaceship->Rotate(90);
 		break;
 		// If right arrow key is pressed start rotating clockwise
-	case GLUT_KEY_RIGHT: mSpaceship->Rotate(-90);
+	case GLUT_KEY_RIGHT: if (isGameRunning) mSpaceship->Rotate(-90);
 		break;
 		// Default case - do nothing
 	default: break;
@@ -162,13 +167,13 @@ void Asteroids::OnSpecialKeyPressed(int key, int x, int y) {
 void Asteroids::OnSpecialKeyReleased(int key, int x, int y) {
 	switch (key) {
 		// If up arrow key is released stop applying forward thrust
-	case GLUT_KEY_UP: mSpaceship->Thrust(0);
+	case GLUT_KEY_UP: if (isGameRunning)mSpaceship->Thrust(0);
 		break;
 		// If left arrow key is released stop rotating
-	case GLUT_KEY_LEFT: mSpaceship->Rotate(0);
+	case GLUT_KEY_LEFT: if (isGameRunning) mSpaceship->Rotate(0);
 		break;
 		// If right arrow key is released stop rotating
-	case GLUT_KEY_RIGHT: mSpaceship->Rotate(0);
+	case GLUT_KEY_RIGHT: if (isGameRunning)mSpaceship->Rotate(0);
 		break;
 		// Default case - do nothing
 	default: break;
@@ -180,7 +185,7 @@ void Asteroids::OnSpecialKeyReleased(int key, int x, int y) {
 
 void Asteroids::OnObjectRemoved(GameWorld* world, shared_ptr<GameObject> object) {
 	if (object->GetType() == GameObjectType("Asteroid")) {
-		shared_ptr<GameObject> explosion = CreateExplosion();
+		shared_ptr<GameObject> explosion = CreateExplosion(EXPLOSION_ASTEROID);
 		explosion->SetPosition(object->GetPosition());
 		explosion->SetRotation(object->GetRotation());
 		mGameWorld->AddObject(explosion);
@@ -188,6 +193,17 @@ void Asteroids::OnObjectRemoved(GameWorld* world, shared_ptr<GameObject> object)
 		if (mAsteroidCount <= 0) {
 			SetTimer(500, START_NEXT_LEVEL);
 		}
+	}
+	else if (object->GetType() == GameObjectType("AlienSpaceship")) {
+		shared_ptr<GameObject> explosion = CreateExplosion(EXPLOSION_SPACESHIP);
+		explosion->SetPosition(object->GetPosition());
+		explosion->SetRotation(object->GetRotation());
+		explosion->SetScale(0.5f);
+		mGameWorld->AddObject(explosion);
+		// mAsteroidCount--;
+		// if (mAsteroidCount <= 0) {
+		// 	SetTimer(500, START_NEXT_LEVEL);
+		// }
 	}
 	else if (object->GetType() == GameObjectType("BulletPowerUp")) {
 		mSpaceship->toggleSuperShot();
@@ -203,7 +219,8 @@ void Asteroids::OnObjectRemoved(GameWorld* world, shared_ptr<GameObject> object)
 		// Get the lives left message as a string
 		std::string lives_msg = msg_stream.str();
 		mLivesLabel->SetText(lives_msg);
-	}else if(object->GetType()==GameObjectType("CircleBulletPowerUp")) {
+	}
+	else if (object->GetType() == GameObjectType("CircleBulletPowerUp")) {
 		// mSpaceship->toggleSuperShot();
 		mSpaceship->toggleUltraShoot();
 		bulletPowerTime = 10;
@@ -222,10 +239,12 @@ void Asteroids::OnTimer(int value) {
 
 	if (value == START_NEXT_LEVEL) {
 		mLevel++;
-		int num_asteroids = 10 + 2 * mLevel;
+		const int num_asteroids = 1 + 2 * mLevel;
 		CreateOnePowerUps(1);
 		CreateBulletPowerUps(1);
 		CreateAsteroids(num_asteroids);
+		mAlienSpaceship->SetRandomPosition();
+		mGameWorld->AddObject(mAlienSpaceship);
 	}
 
 	if (value == SHOW_GAME_OVER) {
@@ -251,6 +270,19 @@ void Asteroids::OnTimer(int value) {
 		mSpaceship->toggleUltraShoot();
 	}
 
+	if (value == UPDATE_ALIEN_SHIP) {
+		mAlienSpaceship->Thrust(5, mSpaceship->GetPosition());
+
+
+		// mAlienSpaceship->Rotate();
+		SetTimer(100, UPDATE_ALIEN_SHIP);
+	}
+	if (value == SHOOT_ALIEN_SHIP) {
+		mAlienSpaceship->Shoot(mSpaceship->GetPosition());
+
+		SetTimer(2000, SHOOT_ALIEN_SHIP);
+	}
+
 }
 
 // PROTECTED INSTANCE METHODS /////////////////////////////////////////////////
@@ -273,6 +305,25 @@ shared_ptr<GameObject> Asteroids::CreateSpaceship() {
 
 }
 
+shared_ptr<GameObject> Asteroids::CreateAlienSpaceship() {
+	// Create a raw pointer to a spaceship that can be converted to
+	// shared_ptrs of different types because GameWorld implements IRefCount
+	mAlienSpaceship = make_shared<AlienSpaceship>();
+	mAlienSpaceship->SetBoundingShape(make_shared<BoundingSphere>(mAlienSpaceship->GetThisPtr(), 4.0f));
+	shared_ptr<Shape> bullet_shape = make_shared<Shape>("bullet_alien.shape");
+	mAlienSpaceship->SetBulletShape(bullet_shape);
+	Animation* anim_ptr = AnimationManager::GetInstance().GetAnimationByName("alienSpaceship");
+	shared_ptr<Sprite> spaceship_sprite =
+		make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
+	mAlienSpaceship->SetSprite(spaceship_sprite);
+	mAlienSpaceship->SetScale(0.1f);
+	// Reset spaceship back to centre of the world
+	// mAlienSpaceship->Reset();
+	// Return the spaceship so it can be added to the world
+	return mAlienSpaceship;
+}
+
+
 void Asteroids::CreateAsteroids(const uint num_asteroids) {
 	mAsteroidCount = num_asteroids;
 	for (uint i = 0; i < num_asteroids; i++) {
@@ -288,22 +339,10 @@ void Asteroids::CreateAsteroids(const uint num_asteroids) {
 	}
 }
 
-// void Asteroids::CreateBulletPowerUps(const uint num_powerUps) {
-// 	Animation* anim_ptr = AnimationManager::GetInstance().GetAnimationByName("spaceship");
-// 	shared_ptr<Sprite> asteroid_sprite
-// 		= make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
-// 	asteroid_sprite->SetLoopAnimation(true);
-// 	shared_ptr<GameObject> asteroid = make_shared<BulletPowerUp>();
-// 	asteroid->SetBoundingShape(make_shared<BoundingSphere>(asteroid->GetThisPtr(), 5.0f));
-// 	asteroid->SetSprite(asteroid_sprite);
-// 	asteroid->SetScale(0.2f);
-// 	mGameWorld->AddObject(asteroid);
-// }
-
 void Asteroids::CreateBulletPowerUps(const uint num_powerUps) {
 	for (uint i = 0; i < num_powerUps; i++) {
 		shared_ptr<GameObject> powerUp = make_shared<BulletPowerUp>();
-		
+
 		// Animation *anim_ptr = AnimationManager::GetInstance().GetAnimationByName("powerUp");
 		Animation* anim_ptr = AnimationManager::GetInstance().CreateAnimationFromFile(
 			"bulletPowerUp", 160, 160, 160, 160, "bulletPowerUp.png");
@@ -318,7 +357,7 @@ void Asteroids::CreateBulletPowerUps(const uint num_powerUps) {
 
 void Asteroids::CreateOnePowerUps(const uint num_powerUps) {
 	for (uint i = 0; i < num_powerUps; i++) {
-		shared_ptr<GameObject>powerUp = make_shared<OnePowerUp>();
+		shared_ptr<GameObject> powerUp = make_shared<OnePowerUp>();
 		// Animation *anim_ptr = AnimationManager::GetInstance().GetAnimationByName("powerUp");
 		Animation* anim_ptr = AnimationManager::GetInstance().CreateAnimationFromFile(
 			"onePowerUp", 160, 160, 160, 160, "1-up-powerup (1).png");
@@ -334,7 +373,7 @@ void Asteroids::CreateOnePowerUps(const uint num_powerUps) {
 void Asteroids::CreateCircleBulletPowerUps(const uint num_powerUps) {
 	for (uint i = 0; i < num_powerUps; i++) {
 		shared_ptr<GameObject> powerUp = make_shared<CircleBulletPowerUp>();
-		
+
 		// Animation *anim_ptr = AnimationManager::GetInstance().GetAnimationByName("powerUp");
 		Animation* anim_ptr = AnimationManager::GetInstance().CreateAnimationFromFile(
 			"circleBulletPowerUp", 160, 160, 160, 160, "circleShot.png");
@@ -426,7 +465,7 @@ void Asteroids::OnScoreChanged(int score) {
 }
 
 void Asteroids::OnPlayerKilled(int lives_left) {
-	shared_ptr<GameObject> explosion = CreateExplosion();
+	shared_ptr<GameObject> explosion = CreateExplosion(EXPLOSION_SPACESHIP);
 	explosion->SetPosition(mSpaceship->GetPosition());
 	explosion->SetRotation(mSpaceship->GetRotation());
 	mGameWorld->AddObject(explosion);
@@ -446,8 +485,11 @@ void Asteroids::OnPlayerKilled(int lives_left) {
 	}
 }
 
-shared_ptr<GameObject> Asteroids::CreateExplosion() {
+shared_ptr<GameObject> Asteroids::CreateExplosion(const int& type) {
 	Animation* anim_ptr = AnimationManager::GetInstance().GetAnimationByName("explosion");
+	if (type == EXPLOSION_SPACESHIP) {
+		anim_ptr = AnimationManager::GetInstance().GetAnimationByName("blueExplosion");
+	}
 	shared_ptr<Sprite> explosion_sprite =
 		make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
 	explosion_sprite->SetLoopAnimation(false);

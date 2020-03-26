@@ -33,3 +33,18 @@
 - Started Creating it
 	- added toggle functionality, just need to create the H and CPP
 - created H and CPP, Windows glitched on opening downloads folder, image should be donwloaded
+
+### Day 3
+- Stop asteroids collide with power up.
+
+## Part 3
+- Have alien spaceship on timer,
+	- every some seconds the ai moves towards the player, and can shoot at the same time.
+	- Create Alien Class and H, with thrust, and shoot
+	- call thrust in OnTimerMethod
+
+- 
+
+# Validation
+- Add so that any game key does not take into effect unless the game has started
+	- simple bool

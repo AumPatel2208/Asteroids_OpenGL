@@ -77,20 +77,6 @@ void Spaceship::Shoot(void) {
 
 
 	for (int i = 0; i < count; ++i) {
-		// Construct a unit length vector in the direction the spaceship is headed
-		// switch (i) {
-		// case 0:
-
-		// 	tempAngle = mAngle;
-		// 	break;
-		// case 1:
-		// 	tempAngle = mAngle + 10;
-		// 	break;
-		// case 2:
-		// 	tempAngle = mAngle + 20;
-		// 	break;
-		// }
-
 		GLVector3f spaceship_heading(cos(DEG2RAD * (mAngle+(10*i))), sin(DEG2RAD * (mAngle+(10*i))), 0);
 		spaceship_heading.normalize();
 		// Calculate the point at the node of the spaceship from position and heading
@@ -115,12 +101,12 @@ void Spaceship::Shoot(void) {
 
 
 bool Spaceship::CollisionTest(shared_ptr<GameObject> o) {
-	if (o->GetType() != GameObjectType("Asteroid")) return false; //&& o->GetType() != GameObjectType("BulletPowerUp")) return false;
+	if (o->GetType() != GameObjectType("Asteroid") && o->GetType()!= GameObjectType("BulletAlien")) return false; 
 	if (mBoundingShape.get() == NULL) return false;
 	if (o->GetBoundingShape().get() == NULL) return false;
-	if (o->GetType() == GameObjectType("Asteroid")) {
-		isAsteroid = true;
-	}
+	// if (o->GetType() == GameObjectType("Asteroid")) {
+	// 	isAsteroid = true;
+	// }
 	// if (o->GetType() == GameObjectType("BulletPowerUp")) {
 	// 	isPowerUp = true;
 	// }
@@ -128,15 +114,5 @@ bool Spaceship::CollisionTest(shared_ptr<GameObject> o) {
 }
 
 void Spaceship::OnCollision(const GameObjectList& objects) {
-	// if (isAsteroid) {
-		//Remove Spaceship
 		mWorld->FlagForRemoval(GetThisPtr());
-		// Reset isAsteroid
-		// isAsteroid = false;
-	// }
-	// else if (isPowerUp) {
-	// 	//Implement Power Up condition
-	// 	superShoot = true;
-	// 	isPowerUp = false;
-	// }
 }

@@ -17,9 +17,11 @@ public:
 
 	bool CollisionTest(shared_ptr<GameObject> o);
 	void OnCollision(const GameObjectList& objects);
+
 	void setType() {
-		
+
 	}
+
 	// const static uint THREE_SHOT = 0;
 	// const static uint CIRCLE_SHOT = 1;
 private:

@@ -103,9 +103,11 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\SRC\AlienSpaceship.cpp" />
     <ClCompile Include="..\..\SRC\Asteroid.cpp" />
     <ClCompile Include="..\..\src\Asteroids.cpp" />
     <ClCompile Include="..\..\src\Bullet.cpp" />
+    <ClCompile Include="..\..\SRC\BulletAlien.cpp" />
     <ClCompile Include="..\..\SRC\BulletPowerUp.cpp" />
     <ClCompile Include="..\..\SRC\CircleBulletPowerUp.cpp" />
     <ClCompile Include="..\..\SRC\Explosion.cpp" />
@@ -114,9 +116,11 @@
     <ClCompile Include="..\..\src\Spaceship.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\SRC\AlienSpaceship.h" />
     <ClInclude Include="..\..\SRC\Asteroid.h" />
     <ClInclude Include="..\..\src\Asteroids.h" />
     <ClInclude Include="..\..\src\Bullet.h" />
+    <ClInclude Include="..\..\SRC\BulletAlien.h" />
     <ClInclude Include="..\..\SRC\BulletPowerUp.h" />
     <ClInclude Include="..\..\SRC\CircleBulletPowerUp.h" />
     <ClInclude Include="..\..\SRC\Explosion.h" />
