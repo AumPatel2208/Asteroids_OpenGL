@@ -46,15 +46,30 @@
 - Alien thrusts towards player, and shoots
 
 ### Improvements
-- shooting slower, slow enemy down
+<!-- - shooting slower, slow enemy down -->
 - change alien sprite
+- add instructions on the start screen
 
 
 ## things to write about
 - starts of slow with 1 asteroid and one enemy, a chance for the player to get a good understanding of the AI behaviour
 - Alien can collide with asteroids and destroy them, the player can use this to their advantage
-- Power-ups do not vanish, so they can strategically time their power pickups
+- the alien spaceship speed keeps accelerating if the player keeps on one specific side of them, this forces the player to keep moving, otherwise the enemy starts moving too fast.
+  - *or the player could use this to their advantage, to destroy the asteroids using the enemy ship.*
+  - to balance this out, I have made it so the alien ship does not collide with the player
+- The bullet from the enemy fires every 2.5 seconds, to give enough time for the player to move
+- Power-ups do not vanish after a level is completed, so they can strategically time their power pickups
 - 
+
+
+## Challenges I faced:
+- I found it tricky to add new Power Up types after adding the first one, ad first I tried to add a variable inside of the first power up class that I had made that whould show what type of power up it is.
+	- however this was not possible as the variable was not accessible when the collision between the power up and Player Ship happened, so I had to rely on the RTTI system created during one of the labs.
+	- this was very useful.
+- To hide the start menu and disable the pressing of the '1' key (which is one of the options in the start menu, and creates all the objects in the game) I figured out that the simplest and most elegant way to go about it was to create a boolean that is True when the Game 'starts' after pressing 1, and to not do anything if it has.
+  - this boolean also came in handy for disabling the Spaceship control keys, as they would throw a null pointer when in the start menu(as the ship was not created yet). So now the keys do not do anything unless the 'isGameRunning' is true.
+
+
 
 # Validation
 - Add so that any game key does not take into effect unless the game has started

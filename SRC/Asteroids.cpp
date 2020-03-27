@@ -280,7 +280,7 @@ void Asteroids::OnTimer(int value) {
 	if (value == SHOOT_ALIEN_SHIP) {
 		mAlienSpaceship->Shoot(mSpaceship->GetPosition());
 
-		SetTimer(2000, SHOOT_ALIEN_SHIP);
+		SetTimer(2500, SHOOT_ALIEN_SHIP);
 	}
 
 }
