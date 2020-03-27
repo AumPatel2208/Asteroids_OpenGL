@@ -73,7 +73,7 @@ void Spaceship::Shoot(void) {
 		count = 36;
 	}
 
-	GLfloat tempAngle = mAngle;
+	// GLfloat tempAngle = mAngle;
 
 
 	for (int i = 0; i < count; ++i) {
@@ -104,12 +104,6 @@ bool Spaceship::CollisionTest(shared_ptr<GameObject> o) {
 	if (o->GetType() != GameObjectType("Asteroid") && o->GetType()!= GameObjectType("BulletAlien")) return false; 
 	if (mBoundingShape.get() == NULL) return false;
 	if (o->GetBoundingShape().get() == NULL) return false;
-	// if (o->GetType() == GameObjectType("Asteroid")) {
-	// 	isAsteroid = true;
-	// }
-	// if (o->GetType() == GameObjectType("BulletPowerUp")) {
-	// 	isPowerUp = true;
-	// }
 	return mBoundingShape->CollisionTest(o->GetBoundingShape());
 }
 

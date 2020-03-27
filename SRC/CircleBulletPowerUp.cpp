@@ -19,14 +19,10 @@ bool CircleBulletPowerUp::CollisionTest(shared_ptr<GameObject> o)
 	if (mBoundingShape.get() == NULL) return false;
 	if (o->GetBoundingShape().get() == NULL) return false;
 	if (o->GetType() != GameObjectType("Spaceship")) return false;
-	if (o->GetType() == GameObjectType("Spaceship")) isSpaceship = true;
 	return mBoundingShape->CollisionTest(o->GetBoundingShape());
 }
 
 void CircleBulletPowerUp::OnCollision(const GameObjectList& objects)
 {
-	if (isSpaceship) {
 		mWorld->FlagForRemoval(GetThisPtr());
-		isSpaceship = false;
-	}
 }

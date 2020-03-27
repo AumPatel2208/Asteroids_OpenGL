@@ -244,6 +244,7 @@ void Asteroids::OnTimer(int value) {
 		CreateBulletPowerUps(1);
 		CreateAsteroids(num_asteroids);
 		mAlienSpaceship->SetRandomPosition();
+		mAlienSpaceship->SetVelocity(GLVector3f(0,0,0));
 		mGameWorld->AddObject(mAlienSpaceship);
 	}
 
@@ -317,8 +318,6 @@ shared_ptr<GameObject> Asteroids::CreateAlienSpaceship() {
 		make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
 	mAlienSpaceship->SetSprite(spaceship_sprite);
 	mAlienSpaceship->SetScale(0.1f);
-	// Reset spaceship back to centre of the world
-	// mAlienSpaceship->Reset();
 	// Return the spaceship so it can be added to the world
 	return mAlienSpaceship;
 }
@@ -468,6 +467,8 @@ void Asteroids::OnPlayerKilled(int lives_left) {
 	shared_ptr<GameObject> explosion = CreateExplosion(EXPLOSION_SPACESHIP);
 	explosion->SetPosition(mSpaceship->GetPosition());
 	explosion->SetRotation(mSpaceship->GetRotation());
+		explosion->SetScale(0.5f);
+
 	mGameWorld->AddObject(explosion);
 
 	// Format the lives left message using an string-based stream
