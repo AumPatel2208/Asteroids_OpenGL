@@ -242,6 +242,7 @@ void Asteroids::OnTimer(int value) {
 		const int num_asteroids = 1 + 2 * mLevel;
 		CreateOnePowerUps(1);
 		CreateBulletPowerUps(1);
+		if(mLevel%2==0) CreateCircleBulletPowerUps(1);
 		CreateAsteroids(num_asteroids);
 		mAlienSpaceship->SetRandomPosition();
 		mAlienSpaceship->SetVelocity(GLVector3f(0,0,0));

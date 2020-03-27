@@ -1,26 +1,21 @@
 ﻿cl : Command line warning D9035: option 'Gm' has been deprecated and will be removed in a future release
-  Spaceship.cpp
   Asteroids.cpp
-  Generating Code...
-Asteroid.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
-  Asteroids.vcxproj -> C:\Users\Aum\Documents\Games Tech\Coursework\IN2026 Coursework Code\VC\Asteroids\..\..\bin\Asteroids.exe
+AlienSpaceship.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
+  Asteroids.vcxproj -> C:\Users\Jaydev\Documents\Aum\GamesTech\Games_Tech_Coursework\VC\Asteroids\..\..\bin\Asteroids.exe
   ..\..\assets\1-up-powerup (1) - Copy.png
   ..\..\assets\1-up-powerup (1).png
   ..\..\assets\asteroid.shape
   ..\..\assets\asteroid1_fs.png
   ..\..\assets\bullet.shape
   ..\..\assets\bulletPowerUp.png
+  ..\..\assets\bullet_alien.shape
+  ..\..\assets\circleShot.png
+  ..\..\assets\explosionBlue_fs.png
   ..\..\assets\explosion_fs.png
-  ..\..\assets\kindpng.png
-  ..\..\assets\kindpng_3345328.png
   ..\..\assets\onePowerUp.png
-  ..\..\assets\powerUp.png
   ..\..\assets\powerUp.shape
-  ..\..\assets\powerUp1_fs.png
-  ..\..\assets\powerUp1_fs____.png
-  ..\..\assets\powerUp2_fs.png
   ..\..\assets\spaceship.shape
   ..\..\assets\spaceship_fs - Copy.png
   ..\..\assets\spaceship_fs.png
   ..\..\assets\thruster.shape
-         19 file(s) copied.
+         16 file(s) copied.

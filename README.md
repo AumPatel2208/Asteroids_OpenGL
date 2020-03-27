@@ -55,8 +55,6 @@
 - created H and CPP, Windows glitched on opening downloads folder, image should be downloaded
 
 
-At first I tried to have one power up class that works for all powerups with only a variable that would define what power up it is. However, I could not figure out how I would go about doing that within this engine as when OnObjectRemoved is called I can not access any PowerUp methods but only the GameObject methods, so I have to stick with the RTTI created to do that, and the only way to initialise the GameObjectType is by creating a new class to do it. I think this lead to unnecessary duplication of code. EG. there is no difference between BulletPowerUp and CircleBulletPowerUp in their code (other than the GameObjectType), but only on what assets are put on them and what 'toggleShot' method is called OnObjectRemoved (which all happens outside the two power up methods and inside the Asteroids method). 
-This is mainly an issue with how the Engine is designed. I found ways around it, but I feel there is a more code-efficient way of going about distinguishing small differences between 2 things inside of one object rather than having to create 2. 
 
 ////////////////////////////////////////////////////////////////
 - I decided to make a power up the allows the spaceship to shoot three bullets at once.
@@ -84,7 +82,18 @@ This is mainly an issue with how the Engine is designed. I found ways around it,
   - I then call that if ObjectRemoved is OnePowerUp
   - I also update the mLivesLabel to display the now changed number of lives.
 
+- I also decided it would be a nice idea to create a label for the Bullet power up so I did that
+  - it would be 0, up when power up is picked up, count down from 10 to 0.
 
+- I decided to add another bullet power up, however this one would be more powerful, and spawn bullets from all around the player. It would be rarer and spawn every other level, balancing it out.
+- I had to implement this by creating another game object class and implementation was very similar to the 3 shot power up, however the only difference was I toggled ```ultraShot``` Boolean. this would be used in the if statement inside the Shoot method.
+- I spawned all power ups inside the ```OnKeyPressed``` case 1,
+- and then I spawned them inside of ```OnTimer``` when it is a start of a new level.
+- I created the circle bullet power ups by doing ```if (mLevel % 2 == 0)``` which would make sure that it would spawn it every other level.
+
+- Issue
+- At first I tried to have one power up class that works for all powerups with only a variable that would define what power up it is. However, I could not figure out how I would go about doing that within this engine as when OnObjectRemoved is called I can not access any PowerUp methods but only the GameObject methods, so I have to stick with the RTTI created to do that, and the only way to initialise the GameObjectType is by creating a new class to do it. I think this lead to unnecessary duplication of code. EG. there is no difference between BulletPowerUp and CircleBulletPowerUp in their code (other than the GameObjectType), but only on what assets are put on them and what 'toggleShot' method is called OnObjectRemoved (which all happens outside the two power up methods and inside the Asteroids method). 
+This is mainly an issue with how the Engine is designed. I found ways around it, but I feel there is a more code-efficient way of going about distinguishing small differences between 2 things inside of one object rather than having to create 2. 
 
 
 ### Day 3
