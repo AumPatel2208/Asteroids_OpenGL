@@ -26,27 +26,16 @@ public:
 
 	void SetRandomPosition(){
 		mPosition.x = rand() / 2;
-	mPosition.y = rand() / 2;
+		mPosition.y = rand() / 2;
 	}
 
 	bool CollisionTest(shared_ptr<GameObject> o);
 	void OnCollision(const GameObjectList& objects);
 
-	void toggleSuperShot() {
-		superShoot = !superShoot;
-	}
-
-	void toggleUltraShoot() {
-		ultraShoot = !ultraShoot;
-	}
 
 private:
 	float mThrust;
 	const double PI = atan(1) * 4;
-	bool isAsteroid = false;
-	bool isPowerUp = false;
-	bool superShoot = false;
-	bool ultraShoot = false;
 	shared_ptr<Shape> mAlienSpaceshipShape;
 	shared_ptr<Shape> mThrusterShape;
 	shared_ptr<Shape> mBulletShape;

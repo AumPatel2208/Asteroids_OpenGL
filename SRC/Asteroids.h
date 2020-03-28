@@ -66,6 +66,7 @@ private:
 	shared_ptr<GUILabel> aExitGameOption;
 
 	bool isGameRunning = false;
+	bool isAlienAlive = false;
 
 	uint mLevel;
 	uint mAsteroidCount;

@@ -4,8 +4,10 @@ AlienSpaceship.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFES
   Asteroids.vcxproj -> C:\Users\Jaydev\Documents\Aum\GamesTech\Games_Tech_Coursework\VC\Asteroids\..\..\bin\Asteroids.exe
   ..\..\assets\1-up-powerup (1) - Copy.png
   ..\..\assets\1-up-powerup (1).png
+  ..\..\assets\alien_spaceship_fs.png
   ..\..\assets\asteroid.shape
   ..\..\assets\asteroid1_fs.png
+  ..\..\assets\aum_asteroid.png
   ..\..\assets\bullet.shape
   ..\..\assets\bulletPowerUp.png
   ..\..\assets\bullet_alien.shape
@@ -15,7 +17,9 @@ AlienSpaceship.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFES
   ..\..\assets\onePowerUp.png
   ..\..\assets\powerUp.shape
   ..\..\assets\spaceship.shape
+  ..\..\assets\spaceship_fs - Copy(1).png
   ..\..\assets\spaceship_fs - Copy.png
+  ..\..\assets\spaceship_fs(1).png
   ..\..\assets\spaceship_fs.png
   ..\..\assets\thruster.shape
-         16 file(s) copied.
+         20 file(s) copied.

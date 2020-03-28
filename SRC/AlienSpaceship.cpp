@@ -78,13 +78,6 @@ void AlienSpaceship::Shoot(const GLVector3f& playerPosition) {
 	// Check the world exists
 	if (!mWorld) return;
 	int count = 1;
-	if (superShoot) {
-		//maybe add the top one with a for loop that changes angle avoiding duplicate code.
-		count = 3;
-	}
-	if (ultraShoot) {
-		count = 36;
-	}
 
 	/*some simple math to find the angle*/
 	double angleRad = atan((playerPosition.y - GetPosition().y) / (playerPosition.x - GetPosition().x));
@@ -111,36 +104,12 @@ void AlienSpaceship::Shoot(const GLVector3f& playerPosition) {
 		// Add the new bullet to the game world
 		mWorld->AddObject(bullet);
 	}
-///////////////////////////////////////
 
-
-
-
-	////////////////////////////////////
-	// for (int i = 0; i < count; ++i) {
-	// 	GLVector3f alien_spaceship_heading(cos(DEG2RAD * (mAngle+(10*i))), sin(DEG2RAD * (mAngle+(10*i))), 0);
-	// 	alien_spaceship_heading.normalize();
-	// 	// Calculate the point at the node of the Alien Spaceship from position and heading
-	// 	GLVector3f displacment(alien_spaceship_heading.x*4+2, alien_spaceship_heading.y*4, 0);
-	// 	GLVector3f bullet_position = mPosition + displacment+ (alien_spaceship_heading * 4);
-	// 	// Calculate how fast the bullet should travel
-	// 	float bullet_speed = 30;
-	// 	// Construct a vector for the bullet's velocity
-	// 	GLVector3f bullet_velocity = mVelocity + alien_spaceship_heading * bullet_speed;
-	// 	// Construct a new bullet
-	// 	shared_ptr<GameObject> bullet
-	// 		(new Bullet(bullet_position, bullet_velocity, mAcceleration, mAngle, 0, 2000));
-	// 	bullet->SetBoundingShape(make_shared<BoundingSphere>(bullet->GetThisPtr(), 2.0f));
-	// 	bullet->SetShape(mBulletShape);
-	// 	// Add the new bullet to the game world
-	// 	mWorld->AddObject(bullet);
-	// }
 }
 
 
 bool AlienSpaceship::CollisionTest(shared_ptr<GameObject> o) {
 	if (o->GetType() != GameObjectType("Bullet")) return false;
-	//&& o->GetType() != GameObjectType("BulletPowerUp")) return false;
 	if (mBoundingShape.get() == NULL) return false;
 	if (o->GetBoundingShape().get() == NULL) return false;
 	return mBoundingShape->CollisionTest(o->GetBoundingShape());

@@ -65,11 +65,15 @@ void Asteroids::Start() {
 		"blueExplosion", 64, 1024, 64, 64, "explosionBlue_fs.png");
 	Animation* asteroid1_anim = AnimationManager::GetInstance().CreateAnimationFromFile(
 		"asteroid1", 128, 8192, 128, 128, "asteroid1_fs.png");
+	// Animation* asteroid1_anim = AnimationManager::GetInstance().CreateAnimationFromFile(
+	// 	"asteroid1", 128, 128, 128, 128, "aum_asteroid.png");
 	Animation* spaceship_anim = AnimationManager::GetInstance().CreateAnimationFromFile(
 		"spaceship", 128, 128, 128, 128, "spaceship_fs.png");
-	Animation* alien_spaceship_anim = AnimationManager::GetInstance().CreateAnimationFromFile(
-		"alienSpaceship", 128, 128, 128, 128, "spaceship_fs - Copy.png");
+	//Animation* alien_spaceship_anim = AnimationManager::GetInstance().CreateAnimationFromFile(
+	//	"alienSpaceship", 128, 128, 128, 128, "spaceship_fs - Copy(1).png");
 
+	Animation* alien_spaceship_anim = AnimationManager::GetInstance().CreateAnimationFromFile(
+		"alienSpaceship", 128, 128, 128, 128, "alien_spaceship_fs.png");
 	/*Code to start the game, moved to keypress 1*/
 	/*
 		// Create a spaceship and add it to the world
@@ -113,6 +117,7 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y) {
 			mGameWorld->AddObject(CreateSpaceship());
 			// Create an alienspaceship and add it to the world
 			mGameWorld->AddObject(CreateAlienSpaceship());
+			isAlienAlive=true;
 			SetTimer(500, UPDATE_ALIEN_SHIP);
 			SetTimer(2000, SHOOT_ALIEN_SHIP);
 			// Create some asteroids and add them to the world
@@ -200,10 +205,7 @@ void Asteroids::OnObjectRemoved(GameWorld* world, shared_ptr<GameObject> object)
 		explosion->SetRotation(object->GetRotation());
 		explosion->SetScale(0.5f);
 		mGameWorld->AddObject(explosion);
-		// mAsteroidCount--;
-		// if (mAsteroidCount <= 0) {
-		// 	SetTimer(500, START_NEXT_LEVEL);
-		// }
+		isAlienAlive=false;
 	}
 	else if (object->GetType() == GameObjectType("BulletPowerUp")) {
 		mSpaceship->toggleSuperShot();
@@ -244,9 +246,10 @@ void Asteroids::OnTimer(int value) {
 		CreateBulletPowerUps(1);
 		if(mLevel%2==0) CreateCircleBulletPowerUps(1);
 		CreateAsteroids(num_asteroids);
+		if(!isAlienAlive){
 		mAlienSpaceship->SetRandomPosition();
 		mAlienSpaceship->SetVelocity(GLVector3f(0,0,0));
-		mGameWorld->AddObject(mAlienSpaceship);
+		mGameWorld->AddObject(mAlienSpaceship);}
 	}
 
 	if (value == SHOW_GAME_OVER) {
@@ -318,6 +321,7 @@ shared_ptr<GameObject> Asteroids::CreateAlienSpaceship() {
 	shared_ptr<Sprite> spaceship_sprite =
 		make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
 	mAlienSpaceship->SetSprite(spaceship_sprite);
+	mAlienSpaceship->SetAngle(180);
 	mAlienSpaceship->SetScale(0.1f);
 	// Return the spaceship so it can be added to the world
 	return mAlienSpaceship;

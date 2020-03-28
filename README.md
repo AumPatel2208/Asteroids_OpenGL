@@ -95,6 +95,7 @@
 - At first I tried to have one power up class that works for all powerups with only a variable that would define what power up it is. However, I could not figure out how I would go about doing that within this engine as when OnObjectRemoved is called I can not access any PowerUp methods but only the GameObject methods, so I have to stick with the RTTI created to do that, and the only way to initialise the GameObjectType is by creating a new class to do it. I think this lead to unnecessary duplication of code. EG. there is no difference between BulletPowerUp and CircleBulletPowerUp in their code (other than the GameObjectType), but only on what assets are put on them and what 'toggleShot' method is called OnObjectRemoved (which all happens outside the two power up methods and inside the Asteroids method). 
 This is mainly an issue with how the Engine is designed. I found ways around it, but I feel there is a more code-efficient way of going about distinguishing small differences between 2 things inside of one object rather than having to create 2. 
 
+///////////////////////////////////////////////////////////////////////////
 
 ### Day 3
 - Stop asteroids collide with power up.
@@ -114,15 +115,6 @@ This is mainly an issue with how the Engine is designed. I found ways around it,
 - change alien sprite
 - add instructions on the start screen
 
-
-## things to write about
-- starts of slow with 1 asteroid and one enemy, a chance for the player to get a good understanding of the AI behaviour
-- Alien can collide with asteroids and destroy them, the player can use this to their advantage
-- the alien spaceship speed keeps accelerating if the player keeps on one specific side of them, this forces the player to keep moving, otherwise the enemy starts moving too fast.
-  - *or the player could use this to their advantage, to destroy the asteroids using the enemy ship.*
-  - to balance this out, I have made it so the alien ship does not collide with the player
-- The bullet from the enemy fires every 2.5 seconds, to give enough time for the player to move
-- Power-ups do not vanish after a level is completed, so they can strategically time their power pickups
 - 
 
 - Explain why I didn't make the Alien ship avoid bullets
@@ -136,7 +128,25 @@ This is mainly an issue with how the Engine is designed. I found ways around it,
       - a way around this problem is to have a pseudo-grid in the game and only check the bullets that are in a certain proximity of the alien ship (relative to the grid).
       - eg. partitioning the world using a quadtree.
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+- Initially when I started thinking about moving the Alien spaceship around, I thought I would need some sort of path finding algorithm, however I thought it would be much more interesting if the alien ship would interact with the Asteroids and destroy them. Then the player can use this to their advantage to destroy the asteroids around the game.
+- I initially created an alien space ship class and header file, very similar to the Spaceship class with some differences on the shooting mechanics
+  - I added a ```SetRandom()``` position method which I can use to set position to anywhere in the world when creating it
+  - I also made it so that the player's position needs to be passed through into the Shoot and Thrust methods, from there I will use Maths to calculate the trajectory angle for the bullet.
+  - I get the angle by doing an arctan to the difference in the y of the playerPosition and alien position divided by the difference in the x of the playerPosition and alien position.
+  - if the x position of the player is less than the x position of the alien, I add PI
+  - this correctly finds the angle, in radians, from where the alien is positioned to where the player is.
 - 
+- 
+
+## things to write about
+- starts of slow with 1 asteroid and one enemy, a chance for the player to get a good understanding of the AI behaviour
+- Alien can collide with asteroids and destroy them, the player can use this to their advantage
+- the alien spaceship speed keeps accelerating if the player keeps on one specific side of them, this forces the player to keep moving, otherwise the enemy starts moving too fast.
+  - *or the player could use this to their advantage, to destroy the asteroids using the enemy ship.*
+  - to balance this out, I have made it so the alien ship does not collide with the player
+- The bullet from the enemy fires every 2.5 seconds, to give enough time for the player to move
+- Power-ups do not vanish after a level is completed, so they can strategically time their power pickups
 
 
 ## Challenges I faced:
