@@ -64,6 +64,7 @@ private:
 	shared_ptr<GUILabel> aGameTitle;
 	shared_ptr<GUILabel> aStartGameOption;
 	shared_ptr<GUILabel> aExitGameOption;
+	shared_ptr<GUILabel> aInstructions;
 
 	bool isGameRunning = false;
 	bool isAlienAlive = false;

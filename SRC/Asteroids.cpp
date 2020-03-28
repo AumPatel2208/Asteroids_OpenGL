@@ -129,6 +129,7 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y) {
 			aGameTitle->SetVisible(false);
 			aStartGameOption->SetVisible(false);
 			aExitGameOption->SetVisible(false);
+			aInstructions->SetVisible(false);
 
 
 			//Create the GUI
@@ -399,17 +400,22 @@ void Asteroids::CreateMenu() {
 	aGameTitle = make_shared<GUILabel>("Asteroids by Aum");
 	aStartGameOption = make_shared<GUILabel>("1) Start Game");
 	aExitGameOption = make_shared<GUILabel>("2) Exit Game");
+	aInstructions = make_shared<GUILabel>("Arrow Keys to move, Space to shoot");
 	aGameTitle->SetVerticalAlignment(GUIComponent::GUI_VALIGN_TOP);
 	aStartGameOption->SetVerticalAlignment(GUIComponent::GUI_VALIGN_TOP);
 	aExitGameOption->SetVerticalAlignment(GUIComponent::GUI_VALIGN_TOP);
+	aInstructions->SetVerticalAlignment(GUIComponent::GUI_VALIGN_BOTTOM);
+	// aInstructions->SetSize(GLVector2i(0.5));
 
 	shared_ptr<GUIComponent> a_game_menu_title_component = static_pointer_cast<GUIComponent>(aGameTitle);
 	shared_ptr<GUIComponent> a_game_menu_startGame_component = static_pointer_cast<GUIComponent>(aStartGameOption);
 	shared_ptr<GUIComponent> a_game_menu_exitGame_component = static_pointer_cast<GUIComponent>(aExitGameOption);
+	shared_ptr<GUIComponent> a_game_menu_instructions_component = static_pointer_cast<GUIComponent>(aInstructions);
 
 	mGameDisplay->GetContainer()->AddComponent(a_game_menu_title_component, GLVector2f(0.3f, 0.7f));
 	mGameDisplay->GetContainer()->AddComponent(a_game_menu_startGame_component, GLVector2f(0.3f, 0.5f));
 	mGameDisplay->GetContainer()->AddComponent(a_game_menu_exitGame_component, GLVector2f(0.3f, 0.4f));
+	mGameDisplay->GetContainer()->AddComponent(a_game_menu_instructions_component, GLVector2f(0.18f, 0.0f));
 
 }
 

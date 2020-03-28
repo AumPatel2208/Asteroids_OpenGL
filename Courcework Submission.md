@@ -1,6 +1,8 @@
 # Games Tech Coursework
+## Aum Patel 
+###  ACZG896
 
-
+<div style="page-break-after: always;"></div>
 ## Part 1
 ### Start Menu
 
@@ -117,10 +119,6 @@ Given that, I had a good idea on how I would make the enemy ship dodge the Playe
   - this would make it simpler to calculate future possible collisions.
   - I could then switch the path the enemy is travelling in, slow the enemy down to avoid the collision, or reverse its moving direction.
   -   This method could detract from the freedom that the enmey has to move in, however, this could be 'faked' by having paths be auto created, or change during the game, giving the illusion that the enemy is not on a predetermined path.
-
-
-### Improvements
-- add instructions on the start screen
 
 ## General notes
 - I decided to start the game off slow, with only one asteroid and an alien ship spawning; I did this so that it gives the player a chance to get a good understanding of the AI behaviour, how to control the player, and what the power-ups do.
