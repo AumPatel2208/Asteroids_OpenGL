@@ -65,31 +65,11 @@ void Asteroids::Start() {
 		"blueExplosion", 64, 1024, 64, 64, "explosionBlue_fs.png");
 	Animation* asteroid1_anim = AnimationManager::GetInstance().CreateAnimationFromFile(
 		"asteroid1", 128, 8192, 128, 128, "asteroid1_fs.png");
-	// Animation* asteroid1_anim = AnimationManager::GetInstance().CreateAnimationFromFile(
-	// 	"asteroid1", 128, 128, 128, 128, "aum_asteroid.png");
 	Animation* spaceship_anim = AnimationManager::GetInstance().CreateAnimationFromFile(
 		"spaceship", 128, 128, 128, 128, "spaceship_fs.png");
-	//Animation* alien_spaceship_anim = AnimationManager::GetInstance().CreateAnimationFromFile(
-	//	"alienSpaceship", 128, 128, 128, 128, "spaceship_fs - Copy(1).png");
 
 	Animation* alien_spaceship_anim = AnimationManager::GetInstance().CreateAnimationFromFile(
 		"alienSpaceship", 128, 128, 128, 128, "alien_spaceship_fs.png");
-	/*Code to start the game, moved to keypress 1*/
-	/*
-		// Create a spaceship and add it to the world
-		mGameWorld->AddObject(CreateSpaceship());
-		// Create some asteroids and add them to the world
-		CreateAsteroids(10);
-	
-		//Create the GUI
-		CreateGUI();
-	
-		// Add a player (watcher) to the game world
-		mGameWorld->AddListener(&mPlayer);
-	
-		// Add this class as a listener of the player
-		mPlayer.AddListener(thisPtr);
-		*/
 
 	CreateMenu();
 
@@ -144,7 +124,6 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y) {
 		}
 		break;
 	case '2':
-		// std::exit(0);
 		Stop();
 	default:
 		break;
@@ -210,7 +189,6 @@ void Asteroids::OnObjectRemoved(GameWorld* world, shared_ptr<GameObject> object)
 	}
 	else if (object->GetType() == GameObjectType("BulletPowerUp")) {
 		mSpaceship->toggleSuperShot();
-		// mSpaceship->toggleUltraShoot();
 		bulletPowerTime = 10;
 		SetTimer(10000, RESET_BULLET_POWER_UP);
 		SetTimer(10, INCREASE_POWER_UP_COUNTER);
@@ -224,7 +202,6 @@ void Asteroids::OnObjectRemoved(GameWorld* world, shared_ptr<GameObject> object)
 		mLivesLabel->SetText(lives_msg);
 	}
 	else if (object->GetType() == GameObjectType("CircleBulletPowerUp")) {
-		// mSpaceship->toggleSuperShot();
 		mSpaceship->toggleUltraShoot();
 		bulletPowerTime = 10;
 		SetTimer(10000, RESET_CIRCLE_BULLET_POWER_UP);
@@ -281,7 +258,6 @@ void Asteroids::OnTimer(int value) {
 		mAlienSpaceship->Thrust(5, mSpaceship->GetPosition());
 
 		}
-		// mAlienSpaceship->Rotate();
 		SetTimer(100, UPDATE_ALIEN_SHIP);
 	}
 	if (value == SHOOT_ALIEN_SHIP) {
@@ -350,7 +326,6 @@ void Asteroids::CreateBulletPowerUps(const uint num_powerUps) {
 	for (uint i = 0; i < num_powerUps; i++) {
 		shared_ptr<GameObject> powerUp = make_shared<BulletPowerUp>();
 
-		// Animation *anim_ptr = AnimationManager::GetInstance().GetAnimationByName("powerUp");
 		Animation* anim_ptr = AnimationManager::GetInstance().CreateAnimationFromFile(
 			"bulletPowerUp", 160, 160, 160, 160, "bulletPowerUp.png");
 		shared_ptr<Sprite> spaceship_sprite =
@@ -365,7 +340,6 @@ void Asteroids::CreateBulletPowerUps(const uint num_powerUps) {
 void Asteroids::CreateOnePowerUps(const uint num_powerUps) {
 	for (uint i = 0; i < num_powerUps; i++) {
 		shared_ptr<GameObject> powerUp = make_shared<OnePowerUp>();
-		// Animation *anim_ptr = AnimationManager::GetInstance().GetAnimationByName("powerUp");
 		Animation* anim_ptr = AnimationManager::GetInstance().CreateAnimationFromFile(
 			"onePowerUp", 160, 160, 160, 160, "1-up-powerup (1).png");
 		shared_ptr<Sprite> spaceship_sprite =
@@ -381,7 +355,6 @@ void Asteroids::CreateCircleBulletPowerUps(const uint num_powerUps) {
 	for (uint i = 0; i < num_powerUps; i++) {
 		shared_ptr<GameObject> powerUp = make_shared<CircleBulletPowerUp>();
 
-		// Animation *anim_ptr = AnimationManager::GetInstance().GetAnimationByName("powerUp");
 		Animation* anim_ptr = AnimationManager::GetInstance().CreateAnimationFromFile(
 			"circleBulletPowerUp", 160, 160, 160, 160, "circleShot.png");
 		shared_ptr<Sprite> spaceship_sprite =
@@ -420,9 +393,6 @@ void Asteroids::CreateMenu() {
 }
 
 void Asteroids::CreateGUI() {
-	/*Commented out line bellow as already creating line in the Menu*/
-	// Add a (transparent) border around the edge of the game display
-	// mGameDisplay->GetContainer()->SetBorder(GLVector2i(10, 10));
 
 	aExitGameOption = make_shared<GUILabel>("2) Exit Game");
 	aExitGameOption->SetVerticalAlignment(GUIComponent::GUI_VALIGN_TOP);

@@ -66,15 +66,11 @@ void Spaceship::Shoot(void) {
 	if (!mWorld) return;
 	int count = 1;
 	if (superShoot) {
-		//maybe add the top one with a for loop that changes angle avoiding duplicate code.
 		count = 3;
 	}
 	if(ultraShoot){
 		count = 36;
 	}
-
-	// GLfloat tempAngle = mAngle;
-
 
 	for (int i = 0; i < count; ++i) {
 		GLVector3f spaceship_heading(cos(DEG2RAD * (mAngle+(10*i))), sin(DEG2RAD * (mAngle+(10*i))), 0);

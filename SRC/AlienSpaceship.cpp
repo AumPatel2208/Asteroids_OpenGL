@@ -84,7 +84,6 @@ void AlienSpaceship::Shoot(const GLVector3f& playerPosition) {
 	if (playerPosition.x < GetPosition().x) {
 		angleRad += PI;
 	}
-	// return (float)angleRad;
 
 	for (int i = 0; i < count; ++i) {
 		GLVector3f alien_spaceship_heading(cos((angleRad + (10 * i))), sin((angleRad + (10 * i))), 0);
