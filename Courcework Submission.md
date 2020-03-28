@@ -69,70 +69,60 @@ I had to implement this by creating another game object class and implementation
 - and then I spawned them inside of ```OnTimer``` when it is a start of a new level.
 - I created the circle bullet power ups by doing ```if (mLevel % 2 == 0)``` which would make sure that it would spawn it every other level.
 
-An issue I had with the way the engine detected what object type had  are detected:
+An issue I had with the way the engine detected what object type had are detected:
 - At first I tried to have one power up class that works for all powerups with only a variable that would define what power up it is. However, I could not figure out how I would go about doing that within this engine as when OnObjectRemoved is called I can not access any PowerUp methods but only the GameObject methods, so I have to stick with the RTTI created to do that, and the only way to initialise the GameObjectType is by creating a new class to do it. I think this lead to unnecessary duplication of code. EG. there is no difference between BulletPowerUp and CircleBulletPowerUp in their code (other than the GameObjectType), but only on what assets are put on them and what 'toggleShot' method is called OnObjectRemoved (which all happens outside the two power up methods and inside the Asteroids method). 
 This is mainly an issue with how the Engine is designed. I found ways around it, but I feel there is a more code-efficient way of going about distinguishing small differences between 2 things inside of one object rather than having to create 2. 
 
-///////////////////////////////////////////////////////////////////////////
-
-### Day 3
-- Stop asteroids collide with power up.
 
 ## Part 3
-- Have alien spaceship on timer,
-	- every some ```seconds()``` the ai moves towards the player, and can shoot at the same time.
-	- Create Alien Class and H, with thrust, and shoot
-	- call thrust in OnTimerMethod
+### Alien Spaceship 
 
-- Alien thrusts towards player, and shoots
-- Thought about changing the shoot interval to a random number between 1 and 4 seconds, however I thought adding randomness would retract from skilful learning of the timing and getting into a rhythm.
-- `
-
-### Improvements
-<!-- - shooting slower, slow enemy down -->
-- change alien sprite
-- add instructions on the start screen
-
-- 
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-- Initially when I started thinking about moving the Alien spaceship around, I thought I would need some sort of path finding algorithm, however I thought it would be much more interesting if the alien ship would interact with the Asteroids and destroy them. Then the player can use this to their advantage to destroy the asteroids around the game.
-- I initially created an ```AlienSpaceship``` class, very similar to the Spaceship class with some differences on the shooting mechanics
-  - I added a ```SetRandom()``` position method which I can use to set position to anywhere in the world when creating it
-  - I also made it so that the player's position needs to be passed through into the Shoot and Thrust methods, from there I will use Maths to calculate the trajectory angle for the bullet.
+Initially when I started thinking about moving the Alien spaceship around, I thought I would need some sort of path finding algorithm, however I thought it would be much more interesting if the alien ship would interact with the Asteroids and destroy them. Then the player can use this to their advantage to destroy the asteroids around the game. This could be done by finding the angle between the Alien ship and the Player's ship.
+I started with creating an ```AlienSpaceship``` class, very similar to the Spaceship class with some differences on the shooting mechanics:
+- I added a ```SetRandom()``` position method which I can use to set position to anywhere in the world when creating it
+- I also made it so that the player's position needs to be passed through into the Shoot and Thrust methods, from there I will use Maths to calculate the trajectory angle for the bullet.
   - I get the angle by doing an arctan to the difference in the y of the playerPosition and alien position divided by the difference in the x of the playerPosition and alien position.
-  - if the x position of the player is less than the x position of the alien, I add PI
+  - if the x position of the player is less than the x position of the alien, I add PI to the angle.
   - this correctly finds the angle, in radians, from where the alien is positioned to where the player is.
-- Then inside the Asteroids Class, I created a Boolean to check whether the alien is alive or not, and I created a ```shared_ptr<AlienSpaceship> mAlienSpaceship;``` which stores the instance of the alien in the game. I also created a ```CreateAlienSpaceship()```
-  - It is mostly similar to ```CreateSpaceship()```
+
+Next inside the Asteroids Class, I created a Boolean to check whether the alien is alive or not, and I created a ```shared_ptr<AlienSpaceship> mAlienSpaceship;``` which stores the instance of the alien in the game. I also created a ```CreateAlienSpaceship()``` method which is mostly similar to ```CreateSpaceship()```:
   - I created a different bullet.shape which is a red colour to help the player easily see it.
-  - I also created a different sprite so that it fits in with the current sprites.
+  - I also created a different sprite for the alien so that it fits in with the style of the current sprites while being easily distinguishable to the Player.
     - I had issues with this, I was following every guideline in the labs and by duplicating the current code for creating a new Animation.
     - However I got a greybox most of the time, even after checking the path to be correct.
     - to fix this, I had to do alot of trial and error in what file was working and wasn't (all 128x128 png files)
     - in the end I took the ```spaceship_fs.png``` and imported it into photoshop, placed the image I wanted on it and removed the old spaceship and saved it as a new png.
-- I call this method after creating the player spaceship, and turn ```isAlienAlive``` into true,
-- I then also create the alien again in the ```START_NEXT_LEVEL``` case inside ```OnTimer```, but only if ```isAlienAlive=false```.
-- I now had an alien space ship with a nice sprite spawning into the scene, I now had to call the shoot and thrust functions periodically
-  - To do this, I created 2 new cases in the ```OnTimer``` function:
-  - ```UPDATE_ALIEN_SHIP```, which calls the ```Thrust()``` method inside the ship with a speed of 5 and then Set_Timer every 10th of a second which calls ```UPDATE_ALIEN_SPACESHIP``` case recursively, &
-  - ```SHOOT_ALIEN_SHIP```, which calls the ```Shoot()``` method inside the ship and then Set_Timer every two and a half seconds which calls ```SHOOT_ALIEN_SHIP``` case recursively
-- these two methods only do something if the alien ship is alive.
-- I experimented around with the thrust speed and the frequency of shooting a bit before coming to these numbers, to provide some sort of fair gameplay balance.
-- Explain **why I didn't make the Alien ship avoid bullets**
-  - the Game has a feeling of low gravity, it is already hard enough to control the player, and to aim and shoot at a moving enemy at the same time having to deal with colliding into asteroids
-  - having the enemy spaceship dodge the bullets would make the game extremely difficulty.
-    - given that, I had a good idea on how I would make the enemy ship dodge bullets:
-    - Rather than the thrust type movement it currently has, it would change into changing the Velocity of the alien ship, so it is more responsive movement
-    - Rather than spawning all the bullets into the world, I would add the bullets spawned by the player into a list and check through the list during the movement of the alien ship to see if any of the bullets were in the same trajectory as its own movement.
-    - then if it was, it would change velocity to move to a random direction away from the bullet to dodge it.                                      
-    - Downsides to this method would be that it could be inefficient checking through every bullet.
-      - a way around this problem is to have a pseudo-grid in the game and only check the bullets that are in a certain proximity of the alien ship (relative to the grid).
-      - eg. partitioning the world using a quadtree.
-//////////////////////////////////////////////////////////////////////////////////////////////////
 
+I call this method after creating the player spaceship, and turn ```isAlienAlive``` into true,
+- I then also create the alien again in the ```START_NEXT_LEVEL``` case inside ```OnTimer```, but only if ```isAlienAlive=false```.
+
+I now had an alien space ship with a nice sprite spawning into the scene, I now had to call the shoot and thrust functions periodically, to do this:
+- I created 2 new cases in the ```OnTimer``` function:
+- ```UPDATE_ALIEN_SHIP```, which calls the ```Thrust()``` method inside the ship with a speed of 5 and then Set_Timer every 10th of a second which calls ```UPDATE_ALIEN_SPACESHIP``` case recursively, &
+- ```SHOOT_ALIEN_SHIP```, which calls the ```Shoot()``` method inside the ship and then Set_Timer every two and a half seconds which calls ```SHOOT_ALIEN_SHIP``` case recursively
+- These two methods only do something if the alien ship is alive.
+- I experimented around with the thrust speed and the frequency of shooting a bit before coming to these numbers, to provide some sort of fair gameplay balance.
+  
+I decided not to make the Alien Ship try and avoid the bullets. This is because the game has a feeling of low gravity, it is already hard enough to control the Player, and to aim and shoot at a moving enemy at the same time having to deal with colliding into asteroids. Having the enemy spaceship dodge the bullets, in addition to all of these obstacles, would make the game extremely difficulty.
+
+Given that, I had a good idea on how I would make the enemy ship dodge the Player's bullets:
+- Rather than the thrust type movement I have currently implemented, I would have the game change the Velocity of the alien ship; this makes the movement much more responsive.
+- Rather than just spawning the Player's bullets into the world, I would have to add the bullets spawned by the player into a list, which makes them accessible, and then I would have to check through the list during the movement of the alien ship to see if any of the bullets are moving in the same trajectory as the alien ship's own movement.
+- then if it was, it would change velocity to move to a random direction *away* from the bullet to dodge it.
+- Downsides to this method would be that it could be very inefficient checking through every bullet in the list every time I update the enemy's movement.
+  - a way around this problem is to have a pseudo-grid in the game and only check the bullets that are in a certain proximity of the alien ship (relative to the grid).
+    - eg. partitioning the world using a quadtree.
+  - another solution is to limit the number of bullets possible in the scene.
+- Another way I could go about doing this is by having predetermined multiple paths the enemy follows.
+  - this would make it simpler to calculate future possible collisions.
+  - I could then switch the path the enemy is travelling in, slow the enemy down to avoid the collision, or reverse its moving direction.
+  -   This method could detract from the freedom that the enmey has to move in, however, this could be 'faked' by having paths be auto created, or change during the game, giving the illusion that the enemy is not on a predetermined path.
+
+
+### Improvements
+- add instructions on the start screen
+
+## General notes
 - I decided to start the game off slow, with only one asteroid and an alien ship spawning; I did this so that it gives the player a chance to get a good understanding of the AI behaviour, how to control the player, and what the power-ups do.
 - I decided to not make the alien ship get destroyed on collision with an Asteroid, but the asteroid gets destroyed. Same with the Alien's bullets
   - I did this so that once learnt, the Player can use this to their advantage to get a higher score.
@@ -140,19 +130,15 @@ This is mainly an issue with how the Engine is designed. I found ways around it,
   - again, the Player can use this to their advantage to use the invulnerability of the Alien to destroy the asteroids.
   - however this makes the Alien much more difficult to shoot down.
 - Power-ups once spawned, do not vanish at the end of a level or after a certain period of time
-    - This could be simply done by using the ```OnTimer``` member to remove the placed power up.
   - This allows the player to strategically time their power pickups and get an edge over the game.
-- 
-\\///////////////////////////////////
+  - Removing power ups could be simply done by using the ```OnTimer``` member to remove the placed power up after a certain period of time, maybe by also adding a flashing animation to notify the Player that the power up will vanish.
 
+### Bugs
+- Bullet time counter goes into negative, -1 is the most common, however can go into -4 at times.
+  - Happens when the shoot button is pressed down during the Circle Power up.
+  - may be due to the lag the use of the power up comes with.
 
-
-
-## Bugs
-- bullet time counter goes into negative, -1 is the most common, however can go into -4 at times.
-
-## Improvements
-- play around with the respawn mechanic so that the Player is invulnerable for a second or two so that the player does not unfairly get destroyed
-  - can also make the spaceship spawn in a safe space and not the centre.
-- Make the asteroids not spawn in the centre of the screen where the player spawns.
-- 
+### Possible Improvements
+- Play around with the respawn mechanic so that the Player is invulnerable for a second or two so that the player does not unfairly get destroyed
+  - Can also make the spaceship spawn in a safe space and not the centre.
+- Make the asteroids not spawn in the centre of the screen where the player spawns at the beginning of the game.
