@@ -249,7 +249,7 @@ void Asteroids::OnTimer(int value) {
 		if(!isAlienAlive){
 		mAlienSpaceship->SetRandomPosition();
 		mAlienSpaceship->SetVelocity(GLVector3f(0,0,0));
-		mGameWorld->AddObject(mAlienSpaceship);}
+		mGameWorld->AddObject(mAlienSpaceship); isAlienAlive=true;}
 	}
 
 	if (value == SHOW_GAME_OVER) {
@@ -276,15 +276,17 @@ void Asteroids::OnTimer(int value) {
 	}
 
 	if (value == UPDATE_ALIEN_SHIP) {
+		if (isAlienAlive){
 		mAlienSpaceship->Thrust(5, mSpaceship->GetPosition());
 
-
+		}
 		// mAlienSpaceship->Rotate();
 		SetTimer(100, UPDATE_ALIEN_SHIP);
 	}
 	if (value == SHOOT_ALIEN_SHIP) {
+		if(isAlienAlive){
 		mAlienSpaceship->Shoot(mSpaceship->GetPosition());
-
+		}
 		SetTimer(2500, SHOOT_ALIEN_SHIP);
 	}
 
