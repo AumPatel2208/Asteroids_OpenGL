@@ -2,7 +2,7 @@
 ## Aum Patel 
 ###  ACZG896
 
-<div style="page-break-after: always;"></div>
+
 ## Part 1
 ### Start Menu
 
