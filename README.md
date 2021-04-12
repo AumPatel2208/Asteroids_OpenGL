@@ -1,5 +1,5 @@
-# Knights Embers
-> A 3D game created in Open-GL & C++ for Games Tech Coursework
+# Asteroids
+> A 2D game created in Open-GL & C++ for Games Tech Coursework
 ## Aum Patel 
 
 
