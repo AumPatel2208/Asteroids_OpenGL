@@ -1,6 +1,5 @@
 # Games Tech Coursework
 ## Aum Patel 
-###  ACZG896
 
 
 ## Part 1
