@@ -1,5 +1,5 @@
 # Knights Embers
-> Games Tech Coursework
+> A 3D game created in Open-GL & C++ for Games Tech Coursework
 ## Aum Patel 
 
 
